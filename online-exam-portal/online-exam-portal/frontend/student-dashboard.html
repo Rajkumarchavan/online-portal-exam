@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - ExamPortal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="nav-brand">📝 ExamPortal</div>
+    <div class="nav-links">
+        <button class="nav-btn active" onclick="showSection('exams')">Available Exams</button>
+        <button class="nav-btn" onclick="showSection('results')">My Results</button>
+    </div>
+    <div class="nav-user">
+        <span>👤 <span id="studentName"></span></span>
+        <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+
+    <!-- Available Exams Section -->
+    <div id="examsSection">
+        <div class="section-header">
+            <h2>📚 Available Exams</h2>
+            <p>Select an exam to start</p>
+        </div>
+        <div id="examsList" class="cards-grid">
+            <div class="loading">Loading exams...</div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection" class="hidden">
+        <div class="section-header">
+            <h2>📊 My Results</h2>
+            <p>Your exam history and scores</p>
+        </div>
+        <div id="resultsList"></div>
+    </div>
+
+</div>
+
+<!-- Exam Modal -->
+<div id="examModal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeExamModal()"></div>
+    <div class="modal-content exam-modal">
+        <div class="exam-header">
+            <h2 id="examModalTitle"></h2>
+            <div class="exam-timer" id="examTimer">⏱️ 00:00</div>
+        </div>
+        <div class="exam-progress">
+            <span id="questionProgress">Question 1 of 10</span>
+            <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+        </div>
+        <div id="questionContainer"></div>
+        <div class="exam-navigation">
+            <button class="btn btn-outline" id="prevBtn" onclick="prevQuestion()">← Previous</button>
+            <div class="question-dots" id="questionDots"></div>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+        </div>
+        <div class="submit-area">
+            <button class="btn btn-success btn-full" onclick="submitExam()">✅ Submit Exam</button>
+        </div>
+    </div>
+</div>
+
+<!-- Result Modal -->
+<div id="resultModal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content result-modal">
+        <div id="resultContent"></div>
+        <button class="btn btn-primary btn-full" onclick="closeResultModal()">Back to Dashboard</button>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/student.js"></script>
+</body>
+</html>
