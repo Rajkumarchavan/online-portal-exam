@@ -3,124 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Exam Portal - Login</title>
+    <title>Exam Portal Login</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="auth-body">
+<body>
+<div class="login-page">
+<div class="login-container">
 
-<div class="auth-container">
-    <div class="auth-card">
-        <div class="auth-logo">
-            <div class="logo-icon">📝</div>
-            <h1>ExamPortal</h1>
-            <p>Online Examination System</p>
-        </div>
+<!-- Left Panel -->
+<div class="left-panel">
+    <img src="static/Logo.png" alt="Exam Portal Logo" class="portal-logo">
+    <h1> ExamSphere</h1>
+    <p>
+        Assess. Learn. Achieve.
+    </p>
+</div>
 
-        <!-- Toggle Tabs -->
-        <div class="auth-tabs">
-            <button class="tab-btn active" onclick="showTab('login')">Login</button>
-            <button class="tab-btn" onclick="showTab('register')">Register</button>
-        </div>
+<!-- Right Panel -->
+<div class="right-panel">
+    <div class="login-box">
 
-        <!-- Login Form -->
-        <div id="loginTab" class="tab-content">
-            <div class="alert" id="loginAlert"></div>
-            <div class="form-group">
-                <label>Email Address</label>
+        <h2 id="formTitle">Welcome Back</h2>
+        <div class="alert" id="loginAlert"></div>
+
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+            <div class="input-group">
+                <label>Email </label>
                 <input type="email" id="loginEmail" placeholder="Enter your email" required>
             </div>
-            <div class="form-group">
+            <div class="input-group">
                 <label>Password</label>
                 <input type="password" id="loginPassword" placeholder="Enter your password" required>
             </div>
-            <button class="btn btn-primary btn-full" onclick="login()">
+            <div class="forgot-container">
+                <a href="#" class="forgot" onclick="showForgotPassword(); return false;">Forgot Password?</a>
+            </div>
+            <button class="login-btn" onclick="login()">
                 <span id="loginBtnText">Login</span>
             </button>
-            <div class="demo-creds">
-                <p><strong>Demo Credentials:</strong></p>
+            <div class="register">
+                Don't have an account?
+                <a href="#" onclick="showRegister(); return false;">Register</a>
+            </div>
+            <!-- <div class="demo-creds">
+                <p><strong>Demo Credentials</strong></p>
                 <p>Admin: admin@exam.com / admin123</p>
                 <p>Student: student@exam.com / student123</p>
-            </div>
+            </div> -->
         </div>
 
-        <!-- Register Form -->
-        <div id="registerTab" class="tab-content hidden">
-            <div class="alert" id="registerAlert"></div>
-            <div class="form-group">
+        <!-- REGISTER FORM -->
+        <div id="registerForm" style="display:none;">
+            <div class="input-group">
                 <label>Full Name</label>
                 <input type="text" id="regName" placeholder="Enter your full name" required>
             </div>
-            <div class="form-group">
+            <div class="input-group">
                 <label>Email Address</label>
                 <input type="email" id="regEmail" placeholder="Enter your email" required>
             </div>
-            <div class="form-group">
+            <div class="input-group">
                 <label>Password</label>
-                <input type="password" id="regPassword" placeholder="Create a password" required>
+                <input type="password" id="regPassword" placeholder="Create a password (min 6 chars)" required>
             </div>
-            <button class="btn btn-primary btn-full" onclick="register()">Create Account</button>
+            <button class="login-btn" onclick="register()">
+                <span id="regBtnText">Register</span>
+            </button>
+            <div class="register">
+                Already have an account?
+                <a href="#" onclick="showLogin(); return false;">Login</a>
+            </div>
         </div>
+
+        <!-- FORGOT PASSWORD FORM -->
+        <div id="forgotForm" style="display:none;">
+            <div class="input-group">
+                <label>Registered Email</label>
+                <input type="email" id="forgotEmail" placeholder="Enter your registered email" required>
+            </div>
+            <div class="input-group">
+                <label>New Password</label>
+                <input type="password" id="forgotNewPassword" placeholder="Enter new password (min 6 chars)" required>
+            </div>
+            <button class="login-btn" onclick="resetPassword()">
+                <span id="forgotBtnText">Reset Password</span>
+            </button>
+            <div class="register">
+                Remember your password?
+                <a href="#" onclick="showLogin(); return false;">Login</a>
+            </div>
+        </div>
+
     </div>
 </div>
 
+</div>
+</div>
+
 <script src="js/app.js"></script>
+
 <script>
-    // Redirect if already logged in
+
+    /* ── Redirect if already logged in ── */
     if (localStorage.getItem('token')) {
         const role = localStorage.getItem('role');
         window.location.href = role === 'ADMIN' ? 'admin-dashboard.html' : 'student-dashboard.html';
     }
 
-    function showTab(tab) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tab + 'Tab').classList.remove('hidden');
-        event.target.classList.add('active');
+    /* ── Alert helper ── */
+    function showAlert(message, type = 'error') {
+        const alertBox = document.getElementById('loginAlert');
+        alertBox.textContent = message;
+        alertBox.className = 'alert ' + type;
+        alertBox.style.display = 'block';
+        setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
     }
 
-    async function login() {
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        const btn = document.getElementById('loginBtnText');
+    /* ── Form switchers ── */
+    function showLogin() {
+        document.getElementById('loginForm').style.display    = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('forgotForm').style.display   = 'none';
+        document.getElementById('formTitle').textContent      = 'Welcome Back';
+        document.getElementById('loginAlert').style.display   = 'none';
+    }
 
-        if (!email || !password) {
-            showAlert('loginAlert', 'Please fill all fields', 'error');
-            return;
-        }
+    function showRegister() {
+        document.getElementById('loginForm').style.display    = 'none';
+        document.getElementById('registerForm').style.display = 'block';
+        document.getElementById('forgotForm').style.display   = 'none';
+        document.getElementById('formTitle').textContent      = 'Create Account';
+        document.getElementById('loginAlert').style.display   = 'none';
+    }
+
+    function showForgotPassword() {
+        document.getElementById('loginForm').style.display    = 'none';
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('forgotForm').style.display   = 'block';
+        document.getElementById('formTitle').textContent      = 'Reset Password';
+        document.getElementById('loginAlert').style.display   = 'none';
+    }
+
+    /* ── LOGIN ── */
+    async function login() {
+        const email    = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const btn      = document.getElementById('loginBtnText');
+
+        if (!email || !password) { showAlert('Please fill all fields'); return; }
 
         btn.textContent = 'Logging in...';
         try {
             const res = await api.post('/auth/login', { email, password });
-            localStorage.setItem('token', res.token);
-            localStorage.setItem('role', res.role);
-            localStorage.setItem('name', res.name);
+
+            localStorage.setItem('token',  res.token);
+            localStorage.setItem('role',   res.role);
+            localStorage.setItem('name',   res.name);
             localStorage.setItem('userId', res.id);
 
-            window.location.href = res.role === 'ADMIN' ? 'admin-dashboard.html' : 'student-dashboard.html';
+            window.location.href = res.role === 'ADMIN'
+                ? 'admin-dashboard.html'
+                : 'student-dashboard.html';
+
         } catch (err) {
-            showAlert('loginAlert', err.message || 'Login failed', 'error');
+            showAlert(err.message || 'Login failed. Check your credentials.');
             btn.textContent = 'Login';
         }
     }
 
+    /* ── REGISTER → POST /api/auth/register ── */
     async function register() {
-        const name = document.getElementById('regName').value;
-        const email = document.getElementById('regEmail').value;
+        const name     = document.getElementById('regName').value.trim();
+        const email    = document.getElementById('regEmail').value.trim();
         const password = document.getElementById('regPassword').value;
+        const btn      = document.getElementById('regBtnText');
 
-        if (!name || !email || !password) {
-            showAlert('registerAlert', 'Please fill all fields', 'error');
-            return;
-        }
+        if (!name || !email || !password) { showAlert('Please fill all fields'); return; }
+        if (password.length < 6)          { showAlert('Password must be at least 6 characters'); return; }
 
+        btn.textContent = 'Registering...';
         try {
-            const res = await api.post('/auth/register', { name, email, password });
-            showAlert('registerAlert', res.message, 'success');
-            setTimeout(() => showTab('login'), 1500);
+            await api.post('/auth/register', { name, email, password, role: 'STUDENT' });
+            showAlert('Registration successful! Please login.', 'success');
+            setTimeout(showLogin, 1500);
         } catch (err) {
-            showAlert('registerAlert', err.message || 'Registration failed', 'error');
+            showAlert(err.message || 'Registration failed. Email may already be in use.');
+        } finally {
+            btn.textContent = 'Register';
         }
     }
+
+    /* ── RESET PASSWORD → POST /api/auth/reset-password ── */
+    async function resetPassword() {
+        const email       = document.getElementById('forgotEmail').value.trim();
+        const newPassword = document.getElementById('forgotNewPassword').value;
+        const btn         = document.getElementById('forgotBtnText');
+
+        if (!email || !newPassword) { showAlert('Please fill all fields'); return; }
+        if (newPassword.length < 6) { showAlert('Password must be at least 6 characters'); return; }
+
+        btn.textContent = 'Resetting...';
+        try {
+            await api.post('/auth/reset-password', { email, newPassword });
+            showAlert('Password reset successful! Please login.', 'success');
+            setTimeout(showLogin, 1500);
+        } catch (err) {
+            showAlert(err.message || 'Reset failed. Email may not be registered.');
+        } finally {
+            btn.textContent = 'Reset Password';
+        }
+    }
+
 </script>
+
 </body>
 </html>
