@@ -15,6 +15,8 @@
 ```
 online-exam-portal/
 ├── frontend/
+|   |── static
+|          |──Logo.png
 │   ├── index.html              ← Login & Register
 │   ├── student-dashboard.html  ← Student UI
 │   ├── admin-dashboard.html    ← Admin UI
