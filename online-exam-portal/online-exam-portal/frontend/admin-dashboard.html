@@ -9,14 +9,17 @@
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand">📝 ExamPortal <span class="badge-admin">ADMIN</span></div>
+    <div class="nav-brand">
+        <img src="static/Logo.png" alt="Exam Portal Logo" class="portal-logo" width="200">
+    </div>
     <div class="nav-links">
         <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
         <button class="nav-btn" onclick="showSection('exams')">Manage Exams</button>
         <button class="nav-btn" onclick="showSection('results')">Results</button>
     </div>
     <div class="nav-user">
-        <span>👤 <span id="adminName"></span></span>
+        <span class="badge-admin">ADMIN</span>
+        <span class="nav-username">👤 <span id="adminName"></span></span>
         <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
     </div>
 </nav>
@@ -76,7 +79,7 @@
         <div id="adminExamsList"></div>
     </div>
 
-    <!-- Questions Modal trigger area -->
+    <!-- Questions Section -->
     <div id="questionsSection" class="hidden">
         <div class="section-header">
             <button class="btn btn-outline" onclick="showSection('exams')">← Back to Exams</button>
