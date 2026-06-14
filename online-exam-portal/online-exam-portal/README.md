@@ -57,6 +57,7 @@ spring.datasource.password=YOUR_MYSQL_PASSWORD
 ```
 4. Navigate to backend folder and run:
 ```bash
+cd online-exam-portal
 cd backend
 mvn spring-boot:run
 ```
